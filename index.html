@@ -1,0 +1,458 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Expense Manager</title>
+
+    <link rel="icon" href="icon.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      body {
+        font-family: Arial;
+        margin: 0;
+        text-align: center;
+        background: #0f1115;
+        color: white;
+        overflow-x: hidden;
+      }
+
+      /* NEON GRID BACKGROUND */
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+
+        background-size: 80px 80px;
+
+        z-index: -3;
+      }
+
+      /* GLOW LIGHTS */
+
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        background:
+          radial-gradient(
+            circle at 20% 30%,
+            rgba(0, 198, 255, 0.3),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(106, 90, 205, 0.3),
+            transparent 40%
+          );
+
+        filter: blur(100px);
+        z-index: -2;
+      }
+
+      /* FLOATING MONEY SIGNS */
+
+      .money {
+        position: fixed;
+        font-size: 42px;
+        color: rgba(0, 198, 255, 0.2);
+        animation: float 18s linear infinite;
+        z-index: -1;
+      }
+
+      .money:nth-child(1) {
+        left: 10%;
+        top: 80%;
+      }
+      .money:nth-child(2) {
+        left: 80%;
+        top: 70%;
+      }
+      .money:nth-child(3) {
+        left: 20%;
+        top: 90%;
+      }
+      .money:nth-child(4) {
+        left: 70%;
+        top: 85%;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-250px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      /* CARD */
+
+      .container {
+        max-width: 420px;
+        margin: auto;
+        margin-top: 60px;
+
+        padding: 25px;
+
+        background: linear-gradient(145deg, #ffd700, #e6b800);
+
+        border-radius: 14px;
+
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.7),
+          0 0 20px rgba(255, 215, 0, 0.4);
+
+        color: black;
+      }
+
+      /* INPUT */
+
+      input,
+      select {
+        width: 95%;
+        padding: 10px;
+        margin: 6px;
+
+        border-radius: 6px;
+        border: none;
+      }
+
+      /* NEON BUTTON */
+
+      button {
+        width: 95%;
+        padding: 10px;
+        margin: 6px;
+
+        background: linear-gradient(45deg, #00c6ff, #0072ff);
+
+        border: none;
+        border-radius: 6px;
+
+        color: white;
+        font-weight: bold;
+
+        cursor: pointer;
+
+        box-shadow: 0 0 12px rgba(0, 198, 255, 0.7);
+      }
+
+      button:hover {
+        transform: scale(1.05);
+
+        box-shadow: 0 0 30px rgba(0, 198, 255, 1);
+      }
+
+      /* EXPENSE */
+
+      .expense {
+        display: flex;
+        justify-content: space-between;
+
+        background: rgba(0, 0, 0, 0.1);
+
+        padding: 8px;
+        margin: 6px;
+
+        border-radius: 6px;
+      }
+
+      /* DESIGNER TAG */
+
+      .designer {
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+
+        padding: 10px 18px;
+
+        background: linear-gradient(45deg, #ff6b6b, #6a5acd, #00c9ff);
+
+        border-radius: 25px;
+
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- FLOATING SIGNS -->
+
+    <div class="money">$</div>
+    <div class="money">₹</div>
+    <div class="money">€</div>
+    <div class="money">💰</div>
+
+    <!-- LOGIN -->
+
+    <div class="container" id="loginPage">
+      <h2>🔒 Login</h2>
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Username"
+        autocomplete="off"
+        name="no-user"
+      />
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="new-password"
+        name="no-pass"
+      />
+
+      <button onclick="login()">Login</button>
+
+      <p>No account?</p>
+
+      <button onclick="showSignup()">Sign Up</button>
+    </div>
+
+    <!-- SIGNUP -->
+
+    <div class="container" id="signupPage" style="display: none">
+      <h2>Create Account</h2>
+
+      <input
+        type="text"
+        id="newUser"
+        placeholder="Username"
+        autocomplete="off"
+      />
+
+      <input
+        type="password"
+        id="newPass"
+        placeholder="Password"
+        autocomplete="new-password"
+      />
+
+      <button onclick="createAccount()">Create Account</button>
+
+      <button onclick="showLogin()">Back</button>
+    </div>
+
+    <!-- HOME -->
+
+    <div class="container" id="homePage" style="display: none">
+      <h2>🏠 Dashboard</h2>
+
+      <button onclick="openExpense()">Expense Manager</button>
+
+      <button onclick="openAnalytics()">Analytics</button>
+
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- EXPENSE -->
+
+    <div class="container" id="expensePage" style="display: none">
+      <h2>💰 Expenses</h2>
+
+      <input type="text" id="title" placeholder="Expense" />
+
+      <input type="number" id="amount" placeholder="Amount" />
+
+      <select id="category">
+        <option>Food</option>
+        <option>Travel</option>
+        <option>Shopping</option>
+        <option>Bills</option>
+        <option>Other</option>
+      </select>
+
+      <button onclick="addExpense()">Add Expense</button>
+
+      <h3>Total ₹ <span id="total">0</span></h3>
+
+      <div id="expenseList"></div>
+
+      <button onclick="goHome()">Back</button>
+    </div>
+
+    <!-- ANALYTICS -->
+
+    <div class="container" id="analyticsPage" style="display: none">
+      <h2>📊 Expense Analytics</h2>
+
+      <canvas id="chart"></canvas>
+
+      <button onclick="goHome()">Back</button>
+    </div>
+
+    <div class="designer">Designed by Parshant 😎</div>
+
+    <script>
+      let currentUser = "";
+      let expenses = [];
+
+      /* LOGIN */
+
+      function login() {
+        let u = username.value;
+        let p = password.value;
+
+        let users = JSON.parse(localStorage.getItem("users")) || {};
+
+        if (users[u] === p || (u === "Nonu" && p === "1234")) {
+          currentUser = u;
+
+          expenses = JSON.parse(localStorage.getItem("exp_" + u)) || [];
+
+          loginPage.style.display = "none";
+          homePage.style.display = "block";
+        } else {
+          alert("Invalid login");
+        }
+      }
+
+      /* SIGNUP */
+
+      function showSignup() {
+        loginPage.style.display = "none";
+        signupPage.style.display = "block";
+      }
+
+      function showLogin() {
+        signupPage.style.display = "none";
+        loginPage.style.display = "block";
+      }
+
+      function createAccount() {
+        let u = newUser.value;
+        let p = newPass.value;
+
+        let users = JSON.parse(localStorage.getItem("users")) || {};
+
+        users[u] = p;
+
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("Account Created");
+
+        showLogin();
+      }
+
+      /* NAVIGATION */
+
+      function openExpense() {
+        homePage.style.display = "none";
+        expensePage.style.display = "block";
+
+        loadExpenses();
+      }
+
+      function openAnalytics() {
+        homePage.style.display = "none";
+        analyticsPage.style.display = "block";
+
+        drawChart();
+      }
+
+      function goHome() {
+        expensePage.style.display = "none";
+        analyticsPage.style.display = "none";
+        homePage.style.display = "block";
+      }
+
+      function logout() {
+        location.reload();
+      }
+
+      /* ADD EXPENSE */
+
+      function addExpense() {
+        let title = document.getElementById("title").value;
+        let amount = Number(document.getElementById("amount").value);
+        let category = document.getElementById("category").value;
+
+        expenses.push({ title, amount, category });
+
+        localStorage.setItem("exp_" + currentUser, JSON.stringify(expenses));
+
+        loadExpenses();
+      }
+
+      /* LOAD EXPENSE */
+
+      function loadExpenses() {
+        expenseList.innerHTML = "";
+
+        let total = 0;
+
+        expenses.forEach((e, i) => {
+          total += e.amount;
+
+          expenseList.innerHTML += `<div class="expense">
+${e.title} ₹${e.amount}
+<button onclick="deleteExpense(${i})">X</button>
+</div>`;
+        });
+
+        total.innerText = total;
+
+        document.getElementById("total").innerText = total;
+      }
+
+      /* DELETE */
+
+      function deleteExpense(i) {
+        expenses.splice(i, 1);
+
+        localStorage.setItem("exp_" + currentUser, JSON.stringify(expenses));
+
+        loadExpenses();
+      }
+
+      /* CHART */
+
+      function drawChart() {
+        let totals = { Food: 0, Travel: 0, Shopping: 0, Bills: 0, Other: 0 };
+
+        expenses.forEach((e) => {
+          totals[e.category] += e.amount;
+        });
+
+        let ctx = document.getElementById("chart");
+
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: Object.keys(totals),
+            datasets: [
+              {
+                data: Object.values(totals),
+                backgroundColor: [
+                  "#ff6384",
+                  "#36a2eb",
+                  "#ffce56",
+                  "#4bc0c0",
+                  "#9966ff",
+                ],
+              },
+            ],
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
