@@ -175,19 +175,28 @@
 
       /* DESIGNER TAG */
 
-      .designer {
-        position: fixed;
-        bottom: 15px;
-        right: 15px;
+      .designer{
 
-        padding: 10px 18px;
+position:fixed;
+bottom:20px;
+right:20px;
 
-        background: linear-gradient(45deg, #ff6b6b, #6a5acd, #00c9ff);
+padding:10px 18px;
 
-        border-radius: 25px;
+background:linear-gradient(45deg,#ff6b6b,#6a5acd,#00c9ff);
 
-        font-size: 14px;
-      }
+border-radius:25px;
+
+font-size:14px;
+font-weight:bold;
+
+pointer-events:none;
+
+transform:translateZ(0);
+
+z-index:999;
+
+}
     </style>
   </head>
 
@@ -456,3 +465,4 @@ ${e.title} ₹${e.amount}
     </script>
   </body>
 </html>
+
