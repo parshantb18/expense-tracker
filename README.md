@@ -6,3 +6,6 @@ The application allows users to add expenses with categories such as food, trave
 The interface is designed with a modern fintech-inspired theme featuring neon elements, floating currency symbols, and a responsive dashboard for smooth navigation between sections such as Home, Expense Manager, and Analytics.
 
 All data is stored locally in the browser using local storage, allowing the application to run without a backend database while still supporting multiple users on the same device.
+
+#Live Dashboard: https://earnest-figolla-26dfd7.netlify.app/
+<img width="1895" height="885" alt="image" src="https://github.com/user-attachments/assets/c813062b-00b9-440b-ab42-9dfa9c0e0104" />
