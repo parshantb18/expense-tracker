@@ -1,4 +1,4 @@
-# expense-tracker
+# Expense-Tracker
 Expense Manager is a web-based personal finance tracking application that helps users monitor and manage their daily spending efficiently. The platform includes a secure login and signup system where users can create individual accounts and maintain their own expense records.
 
 The application allows users to add expenses with categories such as food, travel, shopping, bills, and others. It also provides a visual analytics section that displays spending patterns using interactive charts, making it easier to understand financial habits.
